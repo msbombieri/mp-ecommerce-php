@@ -3,7 +3,7 @@
 // SDK de Mercado Pago
 require __DIR__ .  '/vendor/autoload.php';
 
-$access_token = 'APP_USR-38157608410175-042418-74797596b8c0a3c8ef4bca4cce234480-469485398';
+$access_token = 'APP_USR-2767046342004813-042418-0949c0cfe52c3dffb8b0ec2e3b59a68c-469485398';
 $payment_id = $_POST["payment_id"];
 
 $cURLConnection = curl_init();
@@ -30,6 +30,6 @@ $transaction_amount = $jsonResponse->transaction_amount;
   <p>El número de órden del pedido es: <?= $order_id ?></p>
   <p>El payment_method_id es: <?= $payment_method_id ?></p>
   <p>El monto pagado es: <?= $transaction_amount ?></p>
-  <p><a href="https://diegoalfaro-mp-commerce-php.herokuapp.com/">Ir al inicio</a></p>
+  <p><a href="https://msbombieri-mp-ecommerce-php.herokuapp.com/">Ir al inicio</a></p>
 </body>
 </html>
