@@ -57,6 +57,7 @@
                                 <div class="pd-billboard-info">
                                     <h1 class="pd-billboard-header pd-util-compact-small-18">Tienda e-commerce</h1>
                                 </div>
+                                <div ></div>
                             </div>
                         </div>
                     </div>
