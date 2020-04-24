@@ -3,7 +3,7 @@
 // SDK de Mercado Pago
 require __DIR__ .  '/vendor/autoload.php';
 
-MercadoPago\SDK::setAccessToken("APP_USR-8196777983571350-042414-0a4eebcea5beb5ed8db3d88765d539f6-469485398");
+MercadoPago\SDK::setAccessToken("APP_USR-2767046342004813-042418-0949c0cfe52c3dffb8b0ec2e3b59a68c-469485398");
 
 $type = isset($_GET["type"]) ? $_GET["type"] : isset($_POST["type"]) ? $_POST["type"] : null;
 $id = isset($_GET["id"]) ? $_GET["id"] : isset($_POST["id"]) ? $_POST["id"] : null;
