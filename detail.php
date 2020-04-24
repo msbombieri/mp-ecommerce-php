@@ -11,7 +11,8 @@
     // Crea un ítem en la preferencia
     $item = new MercadoPago\Item();
     $item->id = 1234;
-    // $item->picture_url = $_POST['img'];
+    $image_url = 'https://msbombieri-mp-ecommerce-php.herokuapp.com/' . trim($_POST['img'], '.');
+    $item->picture_url = $image_url;
     $item->title = $_POST['title'];
     $item->description = "Dispositivo móvil de Tienda e-commerce";
     $item->quantity = 1;
@@ -41,11 +42,12 @@
     $preference->payer = $payer;
     $preference->external_reference = "ABCD1234";
     $preference->back_urls = array(
-        "success" => "http://localhost:8000/success",
-        "failure" => "http://localhost:8000/failure",
-        "pending" => "http://localhost:8000/pending"
+        "success" => "https://msbombieri-mp-ecommerce-php.herokuapp.com/success",
+        "failure" => "https://msbombieri-mp-ecommerce-php.herokuapp.com/failure",
+        "pending" => "https://msbombieri-mp-ecommerce-php.herokuapp.com/pending"
     );
     $preference->auto_return = "approved";
+    $preference->notification_url = "https://msbombieri-mp-ecommerce-php.herokuapp.com/ipn.php";
 
     $preference->payment_methods = array(
         "excluded_payment_types" => array(
@@ -195,7 +197,7 @@
                                             <?php echo "$" . $_POST['unit'] ?>
                                         </h3>
                                     </div>
-                                    <form action="/procesar-pago" method="POST">
+                                    <form action="/success.php" method="POST">
                                         <script
                                             src="https://www.mercadopago.com.ar/integrations/v1/web-payment-checkout.js"
                                             data-button-label="Pagar la compra";
