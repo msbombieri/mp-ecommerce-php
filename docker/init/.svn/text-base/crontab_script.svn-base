@@ -1,0 +1,36 @@
+#!/bin/bash
+
+echo "Creando las tareas de Crontab"
+
+# Referencias para crear una tarea
+# Consultar las tareas programadas dentro de crontab con el comando 'crontab -e'
+#       
+#       minuto (0-59),                                    
+#       |  hora (0-23),                                   
+#       |  |  día del mes (1-31),                         
+#       |  |  |  mes (1-12),                              
+#       |  |  |  |  día de la semana (0-6 donde 0=Domingo)
+#       |  |  |  |  |    
+#       |  |  |  |  |  comandos       
+#       *  *  *  * 1-5 var/www/html/cron/script_bash.sh
+
+# Algunas tareas
+# */1 * * * 1-5 /var/www/html/cron/cron_proposals_report.sh >> /var/www/html/cron/cron_proposals_report.log 2>&1
+# */1 * * * 1-5 /var/www/html/cron/cron_conciliations_report.sh >> /var/www/html/cron/cron_conciliations_report.log 2>&1
+
+
+
+declare -p | grep -Ev 'BASHOPTS|BASH_VERSINFO|EUID|PPID|SHELLOPTS|UID' > /container.env
+
+# Setup a cron schedule
+echo "SHELL=/bin/bash
+BASH_ENV=/container.env
+00 12 * * * /var/www/html/cron/cron_generateCostRecurrenceItems.sh >> /var/www/html/cron/cron_generateCostRecurrenceItems.log 2>&1
+00 12 * * * /var/www/html/cron/cron_sendMailsChangeArtist.sh >> /var/www/html/cron/cron_sendMailsChangeArtist.log 2>&1
+# This extra line makes it a valid cron" > scheduler.txt
+
+crontab scheduler.txt
+
+echo "Iniciando cron..."
+
+service cron start

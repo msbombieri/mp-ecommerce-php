@@ -1,0 +1,4 @@
+#!/bin/bash
+
+#Inicializa Apache 
+apachectl -D FOREGROUND

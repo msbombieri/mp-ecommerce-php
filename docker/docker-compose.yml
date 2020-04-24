@@ -1,0 +1,29 @@
+version: "3"
+
+services:
+  gattika-web:
+    image: ubuapache
+    ports:
+      - "8081:80"
+    links:
+      - gattika-db
+    networks:
+      - gattika
+    volumes:
+      - F:\proyectos:/var/www/html
+    restart: always  
+  gattika-db:
+    image: postgres:9.3
+    environment:
+      - POSTGRES_USER=gattika
+      - POSTGRES_PASSWORD=docker
+      - POSTGRES_DB=gattika
+    ports:
+      - "5433:5432"
+    volumes:
+      - F:\proyectos\DockerProyectos\Data:/var/lib/postgresql/data
+    networks:
+      - gattika
+networks:
+  gattika:
+    driver: "bridge"

@@ -1,0 +1,9 @@
+#!/bin/bash
+
+# /var/www/html/docker/init/permissions_script -D
+
+# /var/www/html/docker/init/crontab_script -D
+
+# /var/www/html/docker/init/postgresql_script -D
+
+/var/www/html/docker/init/apache_script -D

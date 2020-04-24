@@ -1,0 +1,108 @@
+#
+# DockerFile para la implementación de Integrador MercadoLibre-Finnegans.
+#
+
+FROM ubuntu:18.04
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update && apt-get install -yq --no-install-recommends \
+    apt-utils \
+    curl \
+    # Install git
+    git \
+    # Install apache
+    apache2 \
+    # Install php 7.2
+    libapache2-mod-php7.2 \
+    php7.2-cli \
+    php7.2-json \
+    php7.2-curl \
+    php7.2-fpm \
+    php7.2-gd \
+    php7.2-ldap \
+    php7.2-mbstring \
+    php7.2-mysql \
+    php7.2-pgsql \
+    php7.2-soap \
+    php7.2-sqlite3 \
+    php7.2-xml \
+    php7.2-zip \
+    php7.2-intl \
+    php-imagick \
+    # Install tools
+    openssl \
+    nano \
+    graphicsmagick \
+    imagemagick \
+    ghostscript \
+    mysql-client \
+    iputils-ping \
+    locales \
+    sqlite3 \
+    ca-certificates \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Install composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+RUN locale-gen en_US.UTF-8 en_GB.UTF-8 de_DE.UTF-8 es_ES.UTF-8 fr_FR.UTF-8 it_IT.UTF-8 km_KH sv_SE.UTF-8 fi_FI.UTF-8
+
+HEALTHCHECK --interval=5s --timeout=3s --retries=3 CMD curl -f http://localhost || exit 1
+
+# Activate Rewrite, Deflate, Expires 
+RUN a2enmod rewrite
+RUN a2enmod deflate
+RUN a2enmod expires
+
+# autorise .htaccess files
+RUN sed -i '/<Directory \/var\/www\/>/,/<\/Directory>/ s/AllowOverride None/AllowOverride All/' /etc/apache2/apache2.conf
+
+# #Install PostgreSQL 10
+# RUN apt-get update && apt-get install -y software-properties-common postgresql-10 postgresql-client-10 postgresql-contrib-10
+
+# # Note: The official Debian and Ubuntu images automatically ``apt-get clean``
+# # after each ``apt-get``
+
+
+# RUN mkdir initdb
+# COPY ./sql/* /initdb/
+
+# #Timezone - 
+
+RUN echo "America/Argentina/Buenos_Aires" > /etc/timezone
+RUN dpkg-reconfigure -f noninteractive tzdata
+
+# # Ejecutamos el resto de los comandos con usuario ``postgres`` 
+# USER postgres
+
+# # Creamos un ROL de PostgreSQL llamado ``gattika`` con clave ``docker`` 
+# # y reamos una base de datos `finnegans-mercadolibre` propiedad del rol  ``finnegans``.
+# RUN    /etc/init.d/postgresql start &&\
+#     psql --command "CREATE USER gattika WITH SUPERUSER PASSWORD 'docker';" &&\
+#     createdb -O gattika gattika &&\
+#     psql  -d gattika -f /initdb/GattikaDocker.sql
+
+# # Ajustamos la configuracion de PostgreSQL para acceder remotamente.
+# RUN echo "host all  all    0.0.0.0/0  md5" >> /etc/postgresql/10/main/pg_hba.conf
+
+# # Y agregamos ``listen_addresses`` a ``/etc/postgresql/10/main/postgresql.conf``
+# RUN echo "listen_addresses='*'" >> /etc/postgresql/10/main/postgresql.conf
+
+# # Exponemos los puertos de apache y postgresql
+# EXPOSE 5432 80 443
+
+# # Agregamos VOLUMEs para permitir backup de configuraciones, logs y bases de datos 
+# VOLUME  ["/etc/postgresql", "/var/log/postgresql", "/var/lib/postgresql"]
+
+# #Copiamos los archivos de inicializacion
+COPY ./init/wrapper_script.sh wrapper_script.sh
+
+USER root
+CMD ["/bin/bash","wrapper_script.sh"]
+ 
+#Install Crontab
+RUN apt-get update && apt-get -y install cron
+
+ 
+

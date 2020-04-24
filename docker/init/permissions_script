@@ -1,0 +1,13 @@
+#!/bin/bash
+
+echo "Creando y asignando permisos a los directorios correspondientes."
+
+#Creo la carpeta logs
+mkdir -p /var/www/html/application/logs
+#Asigno permiso de lectura y escritura a la carpeta logs
+chmod -R 777 /var/www/html/application/logs/
+
+#Creo la carpeta cron
+mkdir -p /var/www/html/cron
+#Asigno permiso de lectura y escritura a la carpeta cron
+chmod -R 777 /var/www/html/cron
